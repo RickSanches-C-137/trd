@@ -11,6 +11,8 @@ export default class UserController {
 
     signUp = async (req: Request, res: Response) => {
         const result = await this.userService.signUp(req.body);
+       // res.cookie('auth', JSON.stringify(result.user), { httpOnly: true });
+
         res.redirect('/dashboard');
     }
 
