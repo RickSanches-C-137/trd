@@ -223,14 +223,11 @@ app.post('/signup', async (req: Request, res: Response) => {
         const error = "invalid"
         return res.render('login', { error});
     }
-    const authCookie = req.cookies.auth;
+    console.log("got here")
+    return loginResponse(user._id.toString())
+    //res.cookie('auth', JSON.stringify(result.user), { httpOnly: true });
 
-    if (!authCookie) {
-        return res.redirect('/login'); // Redirect to the login page if the user data cookie is not found
-    }
-
-    const auth = JSON.parse(authCookie);
-    res.render('dashboard.ejs', { user: auth });
+        res.redirect('/dashboard');
 });
 app.get('/logout', (req: Request, res: Response) => {
     // Clear the session or authentication cookies
