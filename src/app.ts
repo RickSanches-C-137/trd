@@ -1,10 +1,15 @@
 import express, { Application, Request, Response } from 'express'
-
+import bcrypt from "bcryptjs";
 import modules from './modules';
 import path from 'path';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import Transaction from './models/transaction.model';
+import User, { IUser } from './models/user.model';
+import { SignInBody } from './modules/user/interface/users.types';
+import { loginResponse } from './utils/login-response';
+import { BadRequestException } from './utils/service-exception';
+import { error } from 'console';
 const app: Application = express();
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -157,12 +162,76 @@ app.get('/history', requireLogin, async (req: Request, res: Response) => {
 
 });
 app.get('/login', (req: Request, res: Response) => {
-    res.render("login.ejs")
+    res.render("login.ejs", { error })
 });
 app.get('/signup', (req: Request, res: Response) => {
-    res.render("signup.ejs")
+    res.render("signup.ejs", { error })
 });
+app.post('/signup', async (req: Request, res: Response) => {
+    const reqemail = req.body.email
+    const reqpassword = req.body.password
+    const requsername = req.body.username
+    const reqconfirmPassword = req.body.confirmPassword;
+    const tc = req.body.tc
+    try {
+      const user = await User.findOne({ email: reqemail });
+  
+      if (user) {
+        const error = "UserAlreadyExists"
+        return res.render('signup', { error});
+      }
+      if (reqpassword !== reqconfirmPassword) {
+        const error = "PasswordsDoNotMatch";
+        return res.render('signup', { error });
+      }
+      if (!tc) {
+        const error = "noTC";
+        return res.render('signup', { error });
+      }
+      const hashedPassword = await bcrypt.hash(reqpassword, 10);
+      const userData: Partial<IUser> = {
+        username: requsername,
+        email: reqemail,
+        password: hashedPassword,
+      };
+      const users = await User.create(userData);
+  
+      // Send welcome email
+      // await this.sendWelcomeEmail(payload.email);
+  
+      // Redirect to a success page
+      res.redirect('/login'); // Change "/success" to the desired success page URL
+    } catch (err) {
+      console.log(err);
+      const error = "ServerError"
+      // Redirect to an error page
+      res.redirect('/signup'); // Change "/error" to the desired error page URL
+    }
+  });
+  app.post('/login', async (req: Request, res: Response) => {
+    const reqemail = req.body.email
+    const reqpassword = req.body.password
+    const user = await User.findOne({ email: reqemail })
+    
+    if (!user) {
+        const error = "noUser"
+        return res.render('login', { error});
+    }
 
+    const validPassword = await bcrypt.compare(reqpassword, user.password);
+    if (!validPassword) {
+        const error = "invalid"
+        return res.render('login', { error});
+    }
+    const authCookie = req.cookies.auth;
+
+    if (!authCookie) {
+        return res.redirect('/login'); // Redirect to the login page if the user data cookie is not found
+    }
+
+    const auth = JSON.parse(authCookie);
+    res.render('dashboard.ejs', { user: auth });
+});
 app.get('/logout', (req: Request, res: Response) => {
     // Clear the session or authentication cookies
     res.clearCookie('auth');

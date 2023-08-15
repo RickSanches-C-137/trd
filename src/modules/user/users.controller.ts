@@ -10,16 +10,24 @@ export default class UserController {
     }
 
     signUp = async (req: Request, res: Response) => {
-        const result = await this.userService.signUp(req.body);
-       // res.cookie('auth', JSON.stringify(result.user), { httpOnly: true });
-
-        res.redirect('/dashboard');
+        try {
+            const result = await this.userService.signUp(req.body);
+            // res.cookie('auth', JSON.stringify(result.user), { httpOnly: true });
+        
+            res.redirect('/dashboard');
+          } catch (error) {
+            console.error(error);
+        
+            // Handle the error, possibly by redirecting to an error page
+            res.redirect('/signup'); // Change "/error" to the desired error page URL
+          }
     }
 
     signIn = async (req: Request, res: Response) => {
         const result = await this.userService.signIn(req.body)
+        
         res.cookie('auth', JSON.stringify(result.user), { httpOnly: true });
-
+        
         res.redirect('/dashboard');
         // res.status(201).json(result);
     }

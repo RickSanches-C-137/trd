@@ -11,8 +11,7 @@ const jwt = jwtGuard({ credentialsRequired: true }).unless({
         '/',
         '/v1/users/signup',
         '/v1/users/signin',
-        '/v1/parcel/get',
-        '/tracker/:parcelId'
+       
 
     ]
 })

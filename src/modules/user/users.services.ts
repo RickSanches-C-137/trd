@@ -8,13 +8,11 @@ import { loginResponse } from "../../utils/login-response";
 export default class UserService {
     signUp = async (payload: SignUpBody) => {
         try {
-            payload.email = payload.email.toLocaleLowerCase();
-            let user = await User.findOne({
-                where: {
-                    email: payload.email
-                }
-            })
+            payload.email = payload.email;
+            const user = await User.findOne({ email: payload.email });
+            console.log(user)
             if (user) {
+                console.log("Email Already exist");
                 throw new BadRequestException("Email Already exist")
             }
             const hashedPassword = await bcrypt.hash(payload.password, 10);
@@ -23,15 +21,14 @@ export default class UserService {
                 email: payload.email,
                 password: hashedPassword
             }
-            user = await User.create(userData);
+            const users = await User.create(userData);
 
             // Send welcome email
-            await this.sendWelcomeEmail(payload.email);
+            // await this.sendWelcomeEmail(payload.email);
 
-            return user;
+            return users;
         } catch (err) {
             console.log(err);
-            throw new Error('Error signing up'); // Throw an error to indicate failure
         }
     }
 
