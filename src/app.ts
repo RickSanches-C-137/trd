@@ -274,6 +274,9 @@ app.get("/transactions", requireLogin, async (req: Request, res: Response) => {
     createdAt: -1,
   });
 
+  if (auth.email != "info@digitalmaxtrd.com") {
+    return res.redirect("/dashboard");
+  }
   res.render("transactions.ejs", { user: auth, transactions });
 });
 
