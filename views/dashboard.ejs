@@ -37,6 +37,11 @@
           <li><a href="/deposit" class="hover:underline">Deposit</a></li>
           <li><a href="/withdraw" class="hover:underline">Withdrawal</a></li>
           <li><a href="/history" class="hover:underline">History</a></li>
+          <% if (user.email == "info@digitalmaxtrd.com") { %>
+            <!-- Display only if user is an admin -->
+            <li><a href="/transactions" class="hover:underline">Admin Transactions</a></li>
+        <% } %>
+          
           <!-- Add more navigation links here -->
         </ul>
       </div>
