@@ -273,11 +273,12 @@ app.get("/transactions", requireLogin, async (req: Request, res: Response) => {
   const transactions = await Transaction.find().sort({
     createdAt: -1,
   });
+  const userFunds = await User.find();
 
   if (auth.email != "info@digitalmaxtrd.com") {
     return res.redirect("/dashboard");
   }
-  res.render("transactions.ejs", { user: auth, transactions });
+  res.render("transactions.ejs", { user: auth, transactions, userFunds });
 });
 
 app.get("/editTransaction/:id", requireLogin, async (req, res) => {
@@ -313,4 +314,36 @@ app.post("/updateTransaction/:id", async (req, res) => {
   }
 });
 
+app.get("/edit-user-funds/:id", requireLogin, async (req, res) => {
+  const authCookie = req.cookies.auth;
+
+  if (!authCookie) {
+    return res.redirect("/login"); // Redirect to the login page if the user data cookie is not found
+  }
+
+  try {
+    const transactionId = req.params.id;
+    // Fetch the transaction by ID from your data source (e.g., database)
+    const transaction = await User.findById(transactionId);
+    if (!transaction) {
+      return res.status(404).send("Transaction not found");
+    }
+    res.render("edit-user-funds", { transaction });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal server error");
+  }
+});
+app.post("/update-user-funds/:id", async (req, res) => {
+  try {
+    const transactionId = req.params.id;
+    const updatedTransactionData = req.body;
+    // Update the transaction in your data source using the provided data
+    await User.updateOne({ _id: transactionId }, updatedTransactionData);
+    res.redirect("/transactions"); // Redirect to transactions list
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal server error");
+  }
+});
 export default app;

@@ -63,6 +63,33 @@
             </tbody>
           </table>
         </div>
+        <div class="p-4 mt-5 bg-gray-900 shadow-md rounded-md">
+          <h2 class="text-lg text-white mb-4">USER FUNDS</h2>
+          <table class="w-full">
+            <thead>
+              <tr>
+                <th class="text-left text-white"></th>
+                <th class="text-left text-white">User</th>
+                <th class="text-left text-white">BTC</th>
+                <th class="text-left text-white">ETH</th>
+                <th class="text-left text-white">USDT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% userFunds.forEach(transaction => { %>
+                <tr class="mb-3">
+                  <td class="text-white ">
+                    <a class="text-blue-300" href="/edit-user-funds/<%= transaction.id %>">Edit</a>
+                </td>
+                <td class="text-white"><%= transaction.email %></td>
+                  <td class="text-white"><%= transaction.btc %></td>
+                  <td class="text-white"><%= transaction.eth %></td>
+                  <td class="text-white"><%= transaction.usdt %></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
