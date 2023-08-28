@@ -5,6 +5,7 @@ export interface IUser {
   email: string;
   password: string;
   username: string;
+  phone: string;
   unhashedPassword: string;
   status: boolean;
   btc: number;
@@ -18,6 +19,7 @@ const userSchema = new Schema<IUser>({
   status: { type: Boolean },
   email: { type: String },
   password: { type: String },
+  phone: { type: String },
   btc: { type: Number, default: 0 },
   eth: { type: Number, default: 0 },
   usdt: { type: Number, default: 0 },

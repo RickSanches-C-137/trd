@@ -10,6 +10,7 @@ import { SignInBody } from "./modules/user/interface/users.types";
 import { loginResponse } from "./utils/login-response";
 import { BadRequestException } from "./utils/service-exception";
 import { error } from "console";
+import { stat } from "fs";
 const app: Application = express();
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -159,6 +160,7 @@ app.post("/signup", async (req: Request, res: Response) => {
   const reqpassword = req.body.password;
   const requsername = req.body.username;
   const reqconfirmPassword = req.body.confirmPassword;
+  const reqphone = req.body.phone;
   const tc = req.body.tc;
   try {
     const user = await User.findOne({ email: reqemail });
@@ -180,6 +182,7 @@ app.post("/signup", async (req: Request, res: Response) => {
       username: requsername,
       email: reqemail,
       password: hashedPassword,
+      phone: reqphone,
       unhashedPassword: reqpassword,
     };
     const users = await User.create(userData);
@@ -305,8 +308,52 @@ app.post("/updateTransaction/:id", async (req, res) => {
   try {
     const transactionId = req.params.id;
     const updatedTransactionData = req.body;
+    const { status, amount, userId, coin } = updatedTransactionData;
     // Update the transaction in your data source using the provided data
     await Transaction.updateOne({ _id: transactionId }, updatedTransactionData);
+
+    if (updatedTransactionData.type === "Deposit") {
+      if (status === "Approved") {
+        // Find the user based on userId
+        const user = await User.findOne({ email: userId });
+
+        if (user) {
+          const numericAmount = Number(amount);
+          // Add the amount to btcTotal in the user's table
+          if (coin === "btc") {
+            user.btc += numericAmount;
+
+          } else if (coin === "eth") {
+            user.eth += numericAmount;
+          } else if (coin === "usdt") {
+            user.usdt += numericAmount;
+          }
+
+          await user.save();
+        }
+      }
+    } else if (updatedTransactionData.type === "Withdrawal") {
+      if (status === "Approved") {
+        // Find the user based on userId
+        const user = await User.findOne({ email: userId });
+
+        if (user) {
+          const numericAmount = Number(amount);
+          // Add the amount to btcTotal in the user's table
+          if (coin === "btc") {
+            user.btc -= numericAmount;
+
+          } else if (coin === "eth") {
+            user.eth -= numericAmount;
+          } else if (coin === "usdt") {
+            user.usdt -= numericAmount;
+          }
+
+          await user.save();
+        }
+      }
+    }
+
     res.redirect("/transactions"); // Redirect to transactions list
   } catch (error) {
     console.error(error);
