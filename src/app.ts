@@ -320,12 +320,12 @@ app.post("/updateTransaction/:id", async (req, res) => {
         if (user) {
           const numericAmount = Number(amount);
           // Add the amount to btcTotal in the user's table
-          if (coin === "btc") {
+          if (coin === "btc" || coin === "Bitcoin") {
             user.btc += numericAmount;
 
-          } else if (coin === "eth") {
+          } else if (coin === "eth" || coin === "Ethereum") {
             user.eth += numericAmount;
-          } else if (coin === "usdt") {
+          } else if (coin === "usdt" || coin === "Tether") {
             user.usdt += numericAmount;
           }
 
