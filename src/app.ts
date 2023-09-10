@@ -11,6 +11,7 @@ import { loginResponse } from "./utils/login-response";
 import { BadRequestException } from "./utils/service-exception";
 import { error } from "console";
 import { stat } from "fs";
+import Message from "./models/messages.model";
 const app: Application = express();
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -220,6 +221,7 @@ app.post("/login", async (req: Request, res: Response) => {
 
   res.redirect("/dashboard");
 });
+
 app.get("/logout", (req: Request, res: Response) => {
   // Clear the session or authentication cookies
   res.clearCookie("auth");
@@ -393,4 +395,103 @@ app.post("/update-user-funds/:id", async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
+
+app.post("/support", requireLogin, async (req, res) => {
+  const authCookie = req.cookies.auth;
+  try {
+    const { text, userId, type, createdAt } = req.body;
+    const data = {
+      text,
+      createdAt,
+      type,
+      userId
+    };
+    const auth = JSON.parse(authCookie);
+    data.userId = auth.email;
+    data.createdAt = new Date();
+    data.type = "user";
+    const save = Message.create(data);
+    const messages = await Message.find({ userId: auth.email }).sort({
+      createdAt: 1,
+    });
+
+    res.render("support.ejs", { user: auth, messages });
+  } catch (err) {
+
+  }
+})
+app.get("/support", requireLogin, async (req: Request, res: Response) => {
+  const authCookie = req.cookies.auth;
+  const auth = JSON.parse(authCookie);
+  const messages = await Message.find({ userId: auth.email }).sort({
+    createdAt: 1,
+  });
+
+  res.render("support.ejs", { user: auth, messages });
+});
+app.get('/chats', async (req, res) => {
+  try {
+    const chats = await Message.find({
+      opened: false
+    })
+
+    res.render('chats', { chats });
+  } catch (error) {
+    // Handle error
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+app.get("/replychats/:userId", requireLogin, async (req, res) => {
+  const authCookie = req.cookies.auth;
+
+  if (!authCookie) {
+    return res.redirect("/login"); // Redirect to the login page if the user data cookie is not found
+  }
+
+  try {
+    const messageId = req.params.userId;
+    // Fetch the transaction by ID from your data source (e.g., database)
+    const messages = await Message.find({ userId: messageId }).sort({
+      createdAt: 1,
+    });
+
+
+    if (!messages) {
+      return res.status(404).send("message not found");
+    }
+    const updateResult = await Message.updateMany({ userId: messageId, opened: false }, { $set: { opened: true } });
+
+    res.render("replychats", { messages, messageId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal server error");
+  }
+});
+app.post("/replychats", requireLogin, async (req, res) => {
+  const authCookie = req.cookies.auth;
+  try {
+    const { text, userId, type, opened, createdAt } = req.body;
+    const data = {
+      text,
+      createdAt,
+      type,
+      opened,
+      userId
+    };
+    const auth = JSON.parse(authCookie);
+    const messageId = userId;
+    data.createdAt = new Date();
+    data.type = "admin";
+    data.opened = true;
+    const save = Message.create(data);
+    const messages = await Message.find({ userId }).sort({
+      createdAt: 1,
+    });
+
+    res.render("replychats.ejs", { user: auth, messages, messageId });
+  } catch (err) {
+
+  }
+})
 export default app;
