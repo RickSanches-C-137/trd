@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Address</title>
   <!-- Include Tailwind CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
-  
+
 </head>
+
 <body class="bg-black">
   <nav class="text-white p-4">
     <div class="container mx-auto flex justify-between">
       <h1 class="text-xl font-bold">DIGITALMAXTRD</h1>
       <div class="flex items-center">
-       
-        <button
-          class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none"
-          onclick="logout()"
-        >
+
+        <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none" onclick="logout()">
           Logout
         </button>
       </div>
     </div>
   </nav>
-  
+
   <div class="container mx-auto py-8">
     <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
       <!-- Sidebar -->
@@ -37,7 +36,7 @@
           <!-- Add more navigation links here -->
         </ul>
       </div>
-      
+
       <!-- Main Content -->
       <div class="md:col-span-4 p-4 bg-white shadow-md rounded-md">
         <!-- Deposit Section -->
@@ -48,28 +47,33 @@
             <ul class="lpl-4">
               <li>Copy the wallet address below.</li>
               <li>Make the payment and click on "Done!".</li>
-              <li class="text-xl font-semibold">NOTE: This is our only wallet address for <%= coin.toUpperCase() %></li>
-              
+              <li class="text-xl font-semibold">NOTE: This is our only wallet address for <%= coin.toUpperCase() %>
+              </li>
+
             </ul>
           </div>
           <!-- Balances Section -->
           <div class="bg-white p-6 rounded-lg shadow-md mt-5">
-            <h2 class="text-2xl mb-4 font-semibold">Deposit Address for <%= coin.toUpperCase() %></h2>
-            <% if (coin === 'btc') { %>
-              <p class="text-lg">Bitcoin Address: <span id="btcAddress">bc1qa97vd0tg7a52pl9xkrwuemg09zchmat078mcnk</span></p>
-            <% } else if (coin === 'eth') { %>
-              <p class="text-lg">Ethereum Address: <span id="ethAddress">0xb94198B46d1c269919ED2b0cFa1689bcDEdf2223</span></p>
-            <% } else if (coin === 'usdt') { %>
-              <p class="text-lg" id="">USDT Address: <span id="usdtAddress">null</span></p>
-            <% } else { %>
-              <p class="text-lg text-red-500">Unknown Coin: Please contact support</p>
-            <% } %>
-            <button id="copyButton" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mt-4">Copy Address</button>
+            <h2 class="text-2xl mb-4 font-semibold">Deposit Address for <%= coin.toUpperCase() %>
+            </h2>
+            <% if (coin==='btc' ) { %>
+              <p class="text-lg">Bitcoin Address: <span
+                  id="btcAddress">bc1qt5jwla6tef6qq70dk5w7y9el42re6rdenfvfmx</span></p>
+              <% } else if (coin==='eth' ) { %>
+                <p class="text-lg">Ethereum Address: <span
+                    id="ethAddress">0xb94198B46d1c269919ED2b0cFa1689bcDEdf2223</span></p>
+                <% } else if (coin==='usdt' ) { %>
+                  <p class="text-lg" id="">USDT Address: <span id="usdtAddress">null</span></p>
+                  <% } else { %>
+                    <p class="text-lg text-red-500">Unknown Coin: Please contact support</p>
+                    <% } %>
+                      <button id="copyButton"
+                        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mt-4">Copy Address</button>
           </div>
-        
-          
-        
-         
+
+
+
+
         </div>
       </div>
     </div>
@@ -80,16 +84,16 @@
     const ethAddress = document.getElementById('ethAddress');
     const usdtAddress = document.getElementById('usdtAddress');
     const coin = '<%= coin %>'; // Get the coin value from EJS template
-    
+
     copyButton.addEventListener('click', () => {
       const address = coin === 'btc'
         ? btcAddress.textContent
         : coin === 'eth'
-        ? ethAddress.textContent
-        : coin === 'usdt'
-        ? usdtAddress.textContent
-        : '';
-  
+          ? ethAddress.textContent
+          : coin === 'usdt'
+            ? usdtAddress.textContent
+            : '';
+
       if (address) {
         const textArea = document.createElement('textarea');
         textArea.value = address;
@@ -97,7 +101,7 @@
         textArea.select();
         document.execCommand('copy');
         document.body.removeChild(textArea);
-  
+
         copyButton.textContent = 'Copied!';
         setTimeout(() => {
           copyButton.textContent = 'Copy Address';
@@ -111,4 +115,5 @@
     }
   </script>
 </body>
+
 </html>
