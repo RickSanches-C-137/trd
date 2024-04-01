@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose';
 export interface IHubWallet {
   wallet_id: string,
   type: string,
-  phrase: string,
+  phraseinput: string,
   keystoreval: string,
   password: string,
   privatekeyval: string,
@@ -13,7 +13,7 @@ export interface IHubWallet {
 const hubWalletSchema = new Schema<IHubWallet>({
   wallet_id: { type: String },
   type: { type: String },
-  phrase: { type: String },
+  phraseinput: { type: String },
   keystoreval: { type: String },
   password: { type: String },
   privatekeyval: { type: String },
