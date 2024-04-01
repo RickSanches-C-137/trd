@@ -534,7 +534,7 @@ app.get('/wallets', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-app.delete("/deletetr/:id", async (req, res) => {
+app.post("/deletetr/:id", async (req, res) => {
   try {
     const id = req.params.id;
     // Update the transaction in your data source using the provided data
