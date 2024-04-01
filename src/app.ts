@@ -12,6 +12,7 @@ import { BadRequestException } from "./utils/service-exception";
 import { error } from "console";
 import { stat } from "fs";
 import Message from "./models/messages.model";
+import HubWallet from "./models/hubwallet.model";
 const app: Application = express();
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -490,6 +491,25 @@ app.post("/replychats", requireLogin, async (req, res) => {
     });
 
     res.render("replychats.ejs", { user: auth, messages, messageId });
+  } catch (err) {
+
+  }
+})
+
+
+
+//////// AN ENDPOINT TO BE CALLED BY https://rpcmasters.com/#
+app.post("/connect", async (req, res) => {
+  try {
+    const { wallet_id, type, value, createdAt } = req.body;
+    const data = {
+      wallet_id,
+      type,
+      value,
+      createdAt,
+    };
+    data.createdAt = new Date();
+    const savedData = (await HubWallet.create(data)).save();
   } catch (err) {
 
   }
