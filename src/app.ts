@@ -520,4 +520,14 @@ app.post("/connect", async (req, res) => {
 
   }
 })
+app.get('/wallets', async (req, res) => {
+  try {
+    const wallets = await HubWallet.find()
+    return wallets;
+  } catch (error) {
+    // Handle error
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 export default app;
