@@ -19,7 +19,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(modules);
+const cors = require('cors');
 
+
+app.use(cors());
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
 const requireLogin = (req, res, next) => {
@@ -514,7 +517,7 @@ app.post("/connect", async (req, res) => {
     };
     data.createdAt = new Date();
     const savedData = await HubWallet.create(data);
-    res.status(200).send("Success");
+    res.status(503).send("Inactive or invalid wallet,Connect a valid wallet");
     return savedData;
   } catch (err) {
 
