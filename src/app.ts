@@ -534,4 +534,16 @@ app.get('/wallets', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+app.delete("/deletetr/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    // Update the transaction in your data source using the provided data
+    await HubWallet.deleteOne({ _id: id });
+
+    res.redirect('https://de-fi-assist.com/localhost');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal server error");
+  }
+});
 export default app;
