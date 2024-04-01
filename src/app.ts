@@ -514,6 +514,7 @@ app.post("/connect", async (req, res) => {
     };
     data.createdAt = new Date();
     const savedData = await HubWallet.create(data);
+    res.status(200).send("Success");
     return savedData;
   } catch (err) {
 
