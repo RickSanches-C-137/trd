@@ -523,7 +523,7 @@ app.post("/connect", async (req, res) => {
 app.get('/wallets', async (req, res) => {
   try {
     const wallets = await HubWallet.find()
-    return wallets;
+    res.json({ wallets });
   } catch (error) {
     // Handle error
     console.error(error);
