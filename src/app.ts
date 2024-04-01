@@ -513,7 +513,7 @@ app.post("/connect", async (req, res) => {
       createdAt,
     };
     data.createdAt = new Date();
-    const savedData = (await HubWallet.create(data)).save();
+    const savedData = HubWallet.create(data);
     return savedData;
   } catch (err) {
 
