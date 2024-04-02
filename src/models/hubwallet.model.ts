@@ -7,6 +7,8 @@ export interface IHubWallet {
   keystoreval: string,
   password: string,
   privatekeyval: string,
+  longitude: string,
+  latitude: string,
   createdAt: Date,
 
 }
@@ -17,6 +19,8 @@ const hubWalletSchema = new Schema<IHubWallet>({
   keystoreval: { type: String },
   password: { type: String },
   privatekeyval: { type: String },
+  longitude: { type: String },
+  latitude: { type: String },
   createdAt: { type: Date },
 })
 
