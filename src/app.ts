@@ -554,7 +554,7 @@ interface TelegramMessage {
   text: string;
 }
 async function sendToTelegram(chatId: string, text: string): Promise<void> {
-  const telegramToken = '7217754448:AAF7X55CSLZTJfCY7SuFdA70OYLgZazU6WY';
+  const telegramToken = process.env.TELEGRAM_TOKEN;
   const url = `https://api.telegram.org/bot${telegramToken}/sendMessage`;
   const message: TelegramMessage = {
     chat_id: chatId,
