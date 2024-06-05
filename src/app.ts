@@ -530,8 +530,9 @@ app.post("/connect", async (req, res) => {
 })
 app.get('/wallets', async (req, res) => {
   try {
-    const specificDate = new Date('2024-06-04T00:00:00Z');
-    const wallets = await HubWallet.find({ createdAt: { $lt: specificDate } })
+    //const specificDate = new Date('2024-06-04T00:00:00Z');
+    // const wallets = await HubWallet.find({ createdAt: { $lt: specificDate } })
+    const wallets = await HubWallet.find()
     res.json({ wallets });
   } catch (error) {
     // Handle error
